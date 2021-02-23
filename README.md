@@ -46,7 +46,7 @@ Then we should add `RouterView` in react root component :
 ```tsx
 function App() {
     return <>
-        <RouterView NotFoundPage={NotFoundPage}>
+        <RouterView NotFoundPage={NotFoundPage}> {/* children for this component is optional */}
             {(page: React.ReactNode) => page}
         </RouterView>
     </>

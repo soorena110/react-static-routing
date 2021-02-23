@@ -1,0 +1,87 @@
+{
+  "name": "react-static-routing",
+  "version": "1.0.0",
+  "description": "Static route for TypeScript, for TS lovers ♥!",
+  "scripts": {
+    "start": "react-app-rewired start",
+    "ts-build": "rimraf ./dist/** && tsc",
+    "babel-build": "rimraf ./dist/** && babel ./src --out-dir dist --extensions '.ts,.tsx'",
+    "travis-deploy-once": "travis-deploy-once",
+    "semantic-release": "semantic-release",
+    "watch": "tsc -- --watch",
+    "test": "jest",
+    "deploy": "npm run ts-build && npm publish --access=public"
+  },
+  "repository": {
+    "type": "git",
+    "start": "react-scripts start",
+    "url": "https://github.com/soorena110/react-static-routing"
+  },
+  "bugs": {
+    "url": "https://github.com/soorena110/react-static-routing/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "keywords": [
+    "static router",
+    "type script router",
+    "react static router",
+    "react"
+  ],
+  "author": "MohammadReza Azarang.",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
+    "@babel/plugin-transform-typescript": "^7.3.2",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/react": "^16.8.5",
+    "@types/react-dom": "^16.8.2",
+    "@types/react-router": "^5.1.11",
+    "@types/react-router-dom": "^5.1.7",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.6.1",
+    "eslint": "^7.13.0",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "react": "^16.8.3",
+    "react-app-rewired": "^2.1.7",
+    "react-dom": "^16.8.3",
+    "react-scripts": "^4.0.1",
+    "react-test-renderer": "^16.8.3",
+    "rimraf": "^3.0.2",
+    "semantic-release": "^15.13.3",
+    "tslint": "^5.13.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^3.6.0",
+    "typescript": "^4.1.2",
+    "react-router-dom": "^5.2.0"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*",
+    "react-router": "*",
+    "react-router-dom": "*"
+  },
+  "dependencies": {
+    "history": "^4.10.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

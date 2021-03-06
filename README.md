@@ -140,7 +140,7 @@ const routes = {
         path: '/login',
         component: LogInPage,
         exact: true,
-    }
+    },
     //...
 
   asyncRoute: {

@@ -6,6 +6,7 @@ import createRouterView from './createRouterView';
 import createFlowHistory from './correctHistory/createFlowHistory';
 import correctHistory from './correctHistory';
 import checkRoutes from "./checkRoutes";
+import * as React from "react";
 
 // thanks for dear `jcalz` in stackOverFlow for helping me in below line ↓ (https://stackoverflow.com/users/2887218/jcalz)
 export const createRoutes = <K extends PropertyKey, TItem extends AppRouteType>(dict: { [P in K]: TItem }) => dict;
@@ -15,6 +16,7 @@ export function createStaticRouter<TRoute extends { [key: string]: AppRouteType 
     options?: {
         history?: History;
         sessionStorageKey?: string;
+        loadingComponent?: React.ComponentType
     },
 ) {
     checkRoutes(routes)
@@ -22,7 +24,7 @@ export function createStaticRouter<TRoute extends { [key: string]: AppRouteType 
     const history = correctHistory(options?.history, flowHistory);
     const router = createRouter(routes, history, flowHistory);
     const useRouteInfo = createUseRouteInfo(routes, history);
-    const RouterView = createRouterView(routes, history);
+    const RouterView = createRouterView(routes, history, {loadingComponent: options?.loadingComponent});
 
     return {router, useRouteInfo, RouterView, history};
 }

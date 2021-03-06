@@ -142,6 +142,12 @@ const routes = {
         exact: true,
     }
     //...
+
+  asyncRoute: {
+    path: '/async',
+    asyncComponent: () => import('./AsyncPage'), // for spliting budle for this route.
+    exact: true,
+  }
 };
 ```
 

@@ -4,6 +4,7 @@ import {Redirect, Route, Router, Switch} from 'react-router-dom';
 import {AppRouteType} from '../createRouter/models';
 import {History} from 'history';
 import {RouteProps} from 'react-router';
+import LoadComponent from "./LoadComponent";
 
 export interface RouterViewProps {
     children?: (page: React.ReactNode) => React.ReactNode;
@@ -13,25 +14,38 @@ export interface RouterViewProps {
 export default function createRouterView<TRoute extends { [key: string]: AppRouteType }>(
     routes: TRoute,
     history: History,
+    options?: { loadingComponent?: React.ComponentType },
 ) {
     return function RouteView({children = p => p, NotFoundPage}: RouterViewProps) {
 
         const renderRouteComponent = useCallback(
-            ({component, ...route}: AppRouteType) => {
-                const Component = component;
+            ({component: Component, ...route}: AppRouteType) => {
 
                 return (
                     <Route
                         key={route.path}
                         path={route.path}
                         exact={route.exact}
-                        render={(props) => children(<Component {...props} />)}
+                        render={(props) => {
+                            let node;
+                            if (Component)
+                                node = <Component {...props} />;
+
+                            if ('asyncComponent' in route) {
+                                const loadingComponent = route.loadingComponent || options?.loadingComponent ||
+                                    (() => <div>loading</div>);
+                                node = <LoadComponent componentLoader={route.asyncComponent}
+                                                      loadingComponent={loadingComponent}/>;
+                            }
+
+                            return children(node)
+                        }}
                     />
                 );
             },
             [children],
         );
-        const c = Object.values(routes).map((route) =>
+        const routesNodes = Object.values(routes).map((route) =>
             isConditionOk(route.condition)
                 ? renderRouteComponent(route)
                 : renderRedirectComponent(route, routes),
@@ -39,7 +53,7 @@ export default function createRouterView<TRoute extends { [key: string]: AppRout
         return (
             <Router history={history}>
                 <Switch>
-                    {c}
+                    {routesNodes}
                     {NotFoundPage && <Route component={NotFoundPage}/>}
                 </Switch>
             </Router>
@@ -47,20 +61,24 @@ export default function createRouterView<TRoute extends { [key: string]: AppRout
     };
 }
 
-function renderRedirectComponent<TRoute extends { [key: string]: AppRouteType }>(route: AppRouteType, routes: TRoute) {
+function renderRedirectComponent<TRoute extends {
+    [key: string]: AppRouteType
+}>(route: AppRouteType, routes: TRoute) {
     const fallbackKey = route.fallbackKey as keyof TRoute;
     const fallback = fallbackKey ? routes[fallbackKey].path : route.fallback;
     if (!fallback) return null;
 
     return (
-        <Redirect
+        <
+            Redirect
             key={route.path}
             path={route.path}
             exact={route.exact}
             push={false}
             to={fallback}
         />
-    );
+    )
+        ;
 }
 
 function isConditionOk(condition: AppRouteType['condition']) {

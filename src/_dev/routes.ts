@@ -46,6 +46,11 @@ const routes = createRoutes({
         condition: notLoggedIn,
         fallback: '/'
     },
+    async: {
+        path: '/async',
+        asyncComponent: () => import('./pages/AsyncPage'),
+        exact: true
+    },
 });
 
 const {router, useRouteInfo, RouterView} = createStaticRouter(routes);

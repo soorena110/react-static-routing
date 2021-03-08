@@ -19,8 +19,8 @@ Or
 yarn add react-static-routing
 ```
 
-After installation, use the following code to create static router objects.
-In this example, using `createRoutes` function is optional. It is used for type checking and code intellisense for each value in `routes`.
+After installation, use the following code to create static router objects. In this example, using `createRoutes`
+function is optional. It is used for type checking and code intellisense for each value in `routes`.
 
 ```ts
 import {createRoutes, createStaticRouter} from "react-static-routing";
@@ -34,7 +34,20 @@ routes = createRoutes({          // `routes` is a key-value-pair object
     loggedInPage: {
         path: '/login',
         component: LogInPage,
-        exact: true
+        exact: true,
+        condition: () => !hasToken() // hide route if condition is not true
+    },
+    notLoggedInHomePage: {
+        path: '/',
+        component: LogInPage,
+        exact: true,
+        condition: () => !hasToken(),
+        fallbackKey: 'homePage' // if `condition` return is false, redirect to `homePage` route (meaning '/' for this example)
+    },
+    asyncRoute: {
+        path: '/async',
+        asyncComponent: () => import('./AsyncPage'), // for spliting budle for this route.
+        exact: true,
     }
 })
 
@@ -68,12 +81,13 @@ router.notExistingPage.toPush() // we get error, because we didn't add `notExist
 
 `history` is exactly history object for the npm package `history@4.10.1`.
 
-* ***Please Note!!!*** For any redirection just use `router` and this `history` object and never create any other history
-  object. Because we subscribed to events of the `history`
+* ***Please Note!!!*** For any redirection just use `router` and this `history` object and never create any other
+  history object. Because we subscribed to events of the `history`
   object. Or if you have history object (just version 4), you should pass it to `createStaticRouter` second argument.
 
 `useRouteInfo` is a hook to get route values in page component. For more information about `useRouteInfo`, please see
-#Passing-Parameters paragraph.
+
+# Passing-Parameters paragraph.
 
 ## How it works
 
@@ -142,12 +156,6 @@ const routes = {
         exact: true,
     },
     //...
-
-  asyncRoute: {
-    path: '/async',
-    asyncComponent: () => import('./AsyncPage'), // for spliting budle for this route.
-    exact: true,
-  }
 };
 ```
 
@@ -235,4 +243,21 @@ type AppRouteType = {
     params?: { [key: string]: unknown };// params passed to the page/route, which will be replace in query
     state?: { [key: string]: unknown };
 };
+```
+
+## Rerender of RouterView
+
+If you want to make RouterView rerender, you can add `useHook` property as shown in the following example ↓
+
+```tsx
+function useCustomHook() {
+    useTokenChange();
+    useEnvironmentChange();
+    useWebsocketConnectionChange();
+}
+
+<RouterView NotFoundPage={NotFoundPage} useHooks={useCustomHook}/>
+
+// or instead you can add it to options for `createStaticRouter` ↓
+const {router, useRouteInfo, RouterView} = createStaticRouter(routes, {useRouteViewHook: useToken});
 ```

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "src",
-    "target": "esnext",
+    "target": "es2015",
     "module": "esnext",
     "lib": [
       "dom",

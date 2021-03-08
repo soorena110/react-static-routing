@@ -16,7 +16,8 @@ export function createStaticRouter<TRoute extends { [key: string]: AppRouteType 
     options?: {
         history?: History;
         sessionStorageKey?: string;
-        loadingComponent?: React.ComponentType
+        loadingComponent?: React.ComponentType,
+        useRouteViewHook?: () => void;
     },
 ) {
     checkRoutes(routes)
@@ -24,7 +25,9 @@ export function createStaticRouter<TRoute extends { [key: string]: AppRouteType 
     const history = correctHistory(options?.history, flowHistory);
     const router = createRouter(routes, history, flowHistory);
     const useRouteInfo = createUseRouteInfo(routes, history);
-    const RouterView = createRouterView(routes, history, {loadingComponent: options?.loadingComponent});
+    const RouterView = createRouterView(routes, history, {
+        loadingComponent: options?.loadingComponent, useRouteViewHook: options?.useRouteViewHook
+    });
 
     return {router, useRouteInfo, RouterView, history};
 }

@@ -3,9 +3,26 @@ import {createRoutes, createStaticRouter} from "../index";
 import NextPage from "./pages/NextPage";
 import NextNextPage from "./pages/NextNextPage";
 import LoginPage from "./pages/LoginPage";
+import {useEffect, useState} from "react";
 
-const loggedIn = () => true;
-const notLoggedIn = () => !loggedIn()
+
+let globalToken = true;
+
+function useToken() {
+    const [token, setToken] = useState(true);
+    useEffect(() => {
+        setTimeout(() => {
+            console.log(!token)
+            setToken(!token);
+            globalToken = !token;
+        }, 1000)
+    }, [token, setToken]);
+
+    return token;
+}
+
+const loggedIn = () => globalToken;
+const notLoggedIn = () => !globalToken;
 
 
 const routes = createRoutes({
@@ -53,7 +70,7 @@ const routes = createRoutes({
     },
 });
 
-const {router, useRouteInfo, RouterView} = createStaticRouter(routes);
+const {router, useRouteInfo, RouterView} = createStaticRouter(routes, {useRouteViewHook: useToken});
 
 export {useRouteInfo, RouterView, router};
 

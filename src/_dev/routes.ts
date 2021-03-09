@@ -4,6 +4,7 @@ import NextPage from "./pages/NextPage";
 import NextNextPage from "./pages/NextNextPage";
 import LoginPage from "./pages/LoginPage";
 import {useEffect, useState} from "react";
+import PageLoading from "./PageLoading";
 
 
 let globalToken = true;
@@ -15,7 +16,7 @@ function useToken() {
             console.log(!token)
             setToken(!token);
             globalToken = !token;
-        }, 1000)
+        }, 10000)
     }, [token, setToken]);
 
     return token;
@@ -41,6 +42,7 @@ const routes = createRoutes({
         path: '/next-next',
         component: NextNextPage,
         exact: true,
+        query: {burger: false} as { burger: boolean }
     },
     next: {
         path: '/next',
@@ -70,7 +72,10 @@ const routes = createRoutes({
     },
 });
 
-const {router, useRouteInfo, RouterView} = createStaticRouter(routes, {useRouteViewHook: useToken});
+const {router, useRouteInfo, RouterView} = createStaticRouter(routes, {
+    useRouteViewHook: useToken,
+    loadingComponent: PageLoading
+});
 
 export {useRouteInfo, RouterView, router};
 

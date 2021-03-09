@@ -1,6 +1,6 @@
 {
   "name": "react-static-routing",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Static route for TypeScript, for TS lovers ♥!",
   "scripts": {
     "start": "react-app-rewired start",

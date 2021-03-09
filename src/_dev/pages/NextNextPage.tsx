@@ -1,8 +1,10 @@
 import * as React from 'react';
-import {router} from "../routes";
+import {router, useRouteInfo} from "../routes";
 
 
 export default function NextNextPage() {
+    console.log(useRouteInfo('nextNext'))
+
     return <div>
         Next Page
         <br/>

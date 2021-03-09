@@ -16,7 +16,7 @@ export function createStaticRouter<TRoute extends { [key: string]: AppRouteType 
     options?: {
         history?: History;
         sessionStorageKey?: string;
-        loadingComponent?: React.ComponentType,
+        loadingComponent?: React.ComponentType<any>,
         useRouteViewHook?: () => void;
     },
 ) {

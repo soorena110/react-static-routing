@@ -175,7 +175,7 @@ const routes = {
             id: number,
             name?: string  // this param is optional
         },
-        query: {} as {
+        query: {hamburger: false} as {
             hamburger: boolean,
             id?: number // this query param is optional
         },
@@ -218,7 +218,8 @@ router.fundBuyOrSell.toBackFromHistory(parameters); // goes back to the route `f
 In a page, if you want to reach this parameter, you can get them as follows:
 
 ```ts
-const {params, query, state, hasReturned} = useRouteInfo('payment');
+const {params, query, state, hasReturned, queryKeys} = useRouteInfo('payment');
+
 console.log(params.id); // logs: 123
 console.log(query.hamburger); // logs: true
 console.log(state.caller); // logs: fundPage
@@ -226,6 +227,15 @@ console.log(params.idd); // compile time error! because `idd` does not exist in 
 
 console.log(hasReturned); // Shows weather we have pushed back button or returning back to this route or not,
 // `false` means we have used `toPush` or `toReplace` methods, `true` means we have used `history.back` or `toBackFromHistory` method.
+
+console.log(queryKeys); // logs: {hamburger: 'hamburger'}, gives you an object like {[queryName]:queryName}
+// remember if you want to use `queryKeys` you should add `query` property for the route like ↓
+// {
+// ...
+// query: `{hamburger: false}`
+// ...
+// }
+// because JavaScript code will give you the returning object and TypeScript doesn't
 ```
 
 ## AppRouteType

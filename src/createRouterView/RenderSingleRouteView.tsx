@@ -1,4 +1,4 @@
-import {AppRouteType} from "../createRouter/models";
+import {AppRouteType} from '../createRouter/models';
 import * as React from "react";
 import {Redirect, Route} from "react-router-dom";
 import LoadComponent from "./LoadComponent";
@@ -9,60 +9,85 @@ interface Props {
     routes: { [key: string]: AppRouteType };
     route: AppRouteType;
     wrapper: (page: React.ReactNode) => React.ReactNode;
-    defaultLoadingComponent?: React.ComponentType
+    defaultLoadingComponent?: React.ComponentType;
+    key: string;
 }
 
-export default function renderSingleRouteView({route, wrapper, routes, defaultLoadingComponent}: Props) {
-    if (isConditionOk(route.condition))
-        return renderRouteComponent(route, wrapper, defaultLoadingComponent || defaultLoading)
+export default function renderSingleRouteView({route, wrapper, routes, defaultLoadingComponent, key}: Props) {
+    if (isConditionOk(route.condition)) {
+        if ('component' in route || 'asyncComponent' in route)
+            return renderRouteComponent(route, wrapper, defaultLoadingComponent || defaultLoading, key);
+        if ('redirect' in route || 'redirectKey' in route) {
+            return renderRedirectComponent(route, routes, key)
+        }
+    }
 
-    return renderRedirectComponent(route, routes);
+    return renderFallbackComponent(route, routes, key);
 }
 
 
-function renderRedirectComponent<TRoute extends {
+function renderFallbackComponent<TRoute extends {
     [key: string]: AppRouteType
-}>(route: AppRouteType, routes: TRoute) {
+}>(route: AppRouteType, routes: TRoute, key: string) {
     const fallbackKey = route.fallbackKey as keyof TRoute;
     const fallback = fallbackKey ? routes[fallbackKey].path : route.fallback;
     if (!fallback) return null;
 
     return (
-        <Redirect
-            key={route.path}
-            path={route.path}
-            exact={route.exact}
-            push={false}
-            to={fallback}
+        <Redirect key={key}
+                  path={route.path}
+                  exact={route.exact}
+                  push={false}
+                  to={fallback}
+        />
+    );
+}
+
+function renderRedirectComponent<TRoute extends {
+    [key: string]: AppRouteType
+}>(route: AppRouteType, routes: TRoute, key: string) {
+    const redirect = 'redirectKey' in route ? routes[route.redirectKey].path : 'redirect' in route && route.redirect;
+    if (!redirect) return null;
+
+    return (
+        <Redirect key={key}
+                  path={route.path}
+                  exact={route.exact}
+                  push={false}
+                  to={redirect}
         />
     );
 }
 
 function renderRouteComponent(
-    {component: Component, ...route}: AppRouteType,
+    route: AppRouteType,
     wrapper: (page: React.ReactNode) => React.ReactNode,
-    defaultLoadingComponent: React.ComponentType) {
+    defaultLoadingComponent: React.ComponentType, key: string) {
 
-    return (
-        <Route
-            key={route.path}
-            path={route.path}
-            exact={route.exact}
-            render={(props) => {
-                let node;
-                if (Component)
-                    node = <Component {...props} />;
+    if ('component' in route || 'asyncComponent' in route)
+        return (
+            <Route key={key}
+                   path={route.path}
+                   exact={route.exact}
+                   render={(props) => {
+                       let node;
+                       if ('component' in route) {
+                           const Component = route.component as any;
+                           node = <Component {...props} />;
+                       }
 
-                if ('asyncComponent' in route) {
-                    const loadingComponent = route.loadingComponent || defaultLoadingComponent;
-                    node = <LoadComponent componentLoader={route.asyncComponent}
-                                          loadingComponent={loadingComponent}/>;
-                }
+                       if ('asyncComponent' in route) {
+                           const loadingComponent = route.loadingComponent || defaultLoadingComponent;
+                           node = <LoadComponent componentLoader={route.asyncComponent}
+                                                 loadingComponent={loadingComponent}/>;
+                       }
 
-                return wrapper(node)
-            }}
-        />
-    );
+                       return wrapper(node)
+                   }}
+            />
+        );
+
+    return null;
 }
 
 

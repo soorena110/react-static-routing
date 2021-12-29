@@ -3,7 +3,7 @@ import {router} from "../routes";
 
 
 export default function LoginPage() {
-    return <div style={{color:"red"}}>
+    return <div style={{color: "red"}}>
         Login Page
         <br/>
         <br/>

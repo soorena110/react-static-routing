@@ -5,6 +5,7 @@ import {History} from 'history';
 import {RouteProps} from 'react-router';
 import renderSingleRouteView from "./RenderSingleRouteView";
 
+
 export interface RouterViewProps {
     children?: (page: React.ReactNode) => React.ReactNode;
     NotFoundPage?: RouteProps['component'];
@@ -24,10 +25,12 @@ export default function createRouterView<TRoute extends { [key: string]: AppRout
 
         const routesNodes = Object.entries(routes).map(([key, route]) =>
             renderSingleRouteView({
-                route: route, routes: routes, wrapper: children,
+                route: route, routes: routes, wrapper: children, key,
                 defaultLoadingComponent: options?.loadingComponent
             })
         )
+
+
         return (
             <Router history={history}>
                 <Switch>

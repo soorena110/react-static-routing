@@ -13,7 +13,7 @@ export default function createUseRouteInfo<TRoute extends { [key: string]: AppRo
         const params = useParams<{ [key in keyof typeof theRoute['params']]: string }>();
         const hasReturned = history.action === 'POP';
         const query = useQueryParameters() as { [key in keyof typeof theRoute['query']]: string };
-        const state = history.location.state as  typeof theRoute['state'];
+        const state = history.location.state as typeof theRoute['state'];
 
         const queryKeys = {} as { [key in keyof typeof theRoute['query']]: string };
         Object.keys(theRoute.query || {}).forEach((r) => ((queryKeys as any)[r] = r));

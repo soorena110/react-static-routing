@@ -7,8 +7,9 @@ type AsyncComponentType = {
     asyncComponent: (() => Promise<{ default: React.ComponentType }>);
     loadingComponent?: React.ComponentType
 }
+export type RedirectType = { redirect: string } | { redirectKey: string }
 
-export type AppRouteType = RouteProps & (ComponentType | AsyncComponentType) & {
+export type AppRouteType = Omit<RouteProps, 'component'> & (ComponentType | AsyncComponentType | RedirectType) & {
     condition?: (() => boolean);
     render?: never;
     fallback?: string;

@@ -9,7 +9,7 @@ import checkRoutes from "./checkRoutes";
 import * as React from "react";
 
 // thanks for dear `jcalz` in stackOverFlow for helping me in below line ↓ (https://stackoverflow.com/users/2887218/jcalz)
-export const createRoutes = <K extends PropertyKey, TItem extends AppRouteType>(dict: { [P in K]: TItem }) => dict;
+export const createRoutes = <K extends string, TItem extends AppRouteType, TRet extends { [key in K]: TItem }>(dict: TRet) => dict;
 
 export function createStaticRouter<TRoute extends { [key: string]: AppRouteType }>(
     routes: TRoute,

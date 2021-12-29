@@ -10,7 +10,7 @@ type Props<TProps> = {
 
 
 export default function LoadComponent<TProps>(
-    {componentLoader, loadingComponent: Loading, ...props}: Props<TProps>
+    {componentLoader, loadingComponent: Loading}: Props<TProps>
 ) {
     const LoadedComponent = useMemo(() => React.lazy(componentLoader), []);
 

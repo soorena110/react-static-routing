@@ -72,7 +72,7 @@ function renderRouteComponent(
                    render={(props) => {
                        let node;
                        if ('component' in route) {
-                           const Component = route.component as any;
+                           const Component = route.component;
                            node = <Component {...props} />;
                        }
 

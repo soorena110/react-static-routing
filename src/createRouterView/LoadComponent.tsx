@@ -1,6 +1,7 @@
 import * as React from "react";
 import {useMemo} from "react";
 
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ComponentType<TProps> = ((props: TProps) => React.ReactNode) | any
 
 type Props<TProps> = {

@@ -16,6 +16,7 @@ export function createStaticRouter<TRoute extends { [key: string]: AppRouteType 
     options?: {
         history?: History;
         sessionStorageKey?: string;
+        //eslint-disable-next-line @typescript-eslint/no-explicit-any
         loadingComponent?: React.ComponentType<any>,
         useRouteViewHook?: () => void;
     },

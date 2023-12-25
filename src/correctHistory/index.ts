@@ -3,7 +3,7 @@ import {FlowHistory} from './createFlowHistory';
 
 export default function correctHistory(history: History | undefined, flowHistory: FlowHistory) {
     if (!history) history = createBrowserHistory();
-    (window as any).$flow = flowHistory.lastLocations;
+    window.$flow = flowHistory.lastLocations;
 
     const lastLocationJson = JSON.stringify(flowHistory.lastLocations[flowHistory.lastLocations.length - 1])
     if (lastLocationJson != JSON.stringify(history.location))

@@ -9,7 +9,10 @@ export default function HomePage() {
         <br/>
         <button onClick={() => router.next.toPush({params: {p1: 1}, query: {q1: 2}, state: {s1: 2}})}>
             go to Next Page
-
+        </button>
+        <br/>
+        <button onClick={() => router.next.toOpenNew({params: {p1: 1}, query: {q1: 2}, state: {s1: 2}})}>
+            open Next Page
         </button>
     </div>
 }

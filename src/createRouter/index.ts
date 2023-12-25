@@ -9,15 +9,23 @@ export default function createRouter<TRoute extends { [key: string]: AppRouteTyp
     flowHistory: FlowHistory
 ) {
     type TRouter = Router<TRoute>;
+    type TKey = keyof TRoute
 
     return new Proxy({} as TRouter, {
-        get<TKey extends keyof TRoute>(_: TRouter, p: TKey): RouterItems<typeof routes[TKey]> {
+        get(_: TRouter, p: string): RouterItems<typeof routes[TKey]> {
             return {
                 toPush(options) {
                     const route = routes[p];
                     const url = addQuery(replaceUrlParams(route.path, options?.params), options?.query);
 
                     history.push(url, options?.state);
+                },
+
+                toOpenNew(options) {
+                    const route = routes[p];
+                    const url = addQuery(replaceUrlParams(route.path, options?.params), options?.query);
+
+                    openInNewTab(url);
                 },
 
                 toReplace(options) {
@@ -47,3 +55,8 @@ export default function createRouter<TRoute extends { [key: string]: AppRouteTyp
         },
     });
 }
+
+function openInNewTab(url:string) {
+    window.open(url, '_blank')?.focus();
+}
+

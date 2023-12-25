@@ -1,13 +1,17 @@
-const { defaults } = require('jest-config');
-
 module.exports = {
-  bail: true,
-  moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
-  roots: ['.'],
-  // testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+  roots: ['<rootDir>/test'],
+  testMatch: [
+    '**/__tests__/**/*.+(ts|tsx|js)',
+    '**/?(*.)+(spec|test).+(ts|tsx|js)',
+  ],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      './config/fileTransformer.js',
   },
-  verbose: true,
-  "moduleDirectories": ["node_modules", "src"]
-};
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.json'
+    }
+  }
+}

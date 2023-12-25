@@ -28,6 +28,7 @@ export type RouterArguments<TRoute> =
 
 export interface RouterItems<TRoute> {
     toPush: (options?: RouterArguments<TRoute>) => void;
+    toOpenNew: (options?: RouterArguments<TRoute>) => void;
     toReplace: (options?: RouterArguments<TRoute>) => void;
     toBackFromHistory: (options?: RouterArguments<TRoute>) => boolean;
 }
